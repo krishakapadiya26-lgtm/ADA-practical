@@ -1,0 +1,51 @@
+import java.util.Random;
+
+public class QuickSortPerformance {
+    public static void main(String[] args) {
+        int n = 100000;
+        int[] arr = new int[n];
+        Random r = new Random();
+
+        for (int i = 0; i < n; i++) {
+            arr[i] = r.nextInt(100000);
+        }
+
+        long startTime = System.nanoTime();
+
+        quickSort(arr, 0, n - 1);
+
+        long endTime = System.nanoTime();
+
+        long executionTime = endTime - startTime;
+        System.out.println("Execution Time (nanoseconds): " + executionTime);
+        System.out.println("Execution Time (milliseconds): " + executionTime / 1_000_000);
+    }
+
+    static void quickSort(int[] arr, int low, int high) {
+        if (low < high) {
+            int p = partition(arr, low, high);
+            quickSort(arr, low, p - 1);
+            quickSort(arr, p + 1, high);
+        }
+    }
+
+    static int partition(int[] arr, int low, int high) {
+        int pivot = arr[high];
+        int i = low - 1;
+
+        for (int j = low; j < high; j++) {
+            if (arr[j] <= pivot) {
+                i++;
+                int temp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp;
+            }
+        }
+
+        int temp = arr[i + 1];
+        arr[i + 1] = arr[high];
+        arr[high] = temp;
+
+        return i + 1;
+    }
+}
