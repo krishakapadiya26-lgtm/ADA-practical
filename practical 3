@@ -1,0 +1,32 @@
+import java.util.Random;
+
+public class InsertionSortPerformance {
+    public static void main(String[] args) {
+        int n = 10000;
+        int[] arr = new int[n];
+        Random r = new Random();
+
+        for (int i = 0; i < n; i++) {
+            arr[i] = r.nextInt(100000);
+        }
+
+        long startTime = System.nanoTime();
+
+        for (int i = 1; i < n; i++) {
+            int key = arr[i];
+            int j = i - 1;
+
+            while (j >= 0 && arr[j] > key) {
+                arr[j + 1] = arr[j];
+                j--;
+            }
+            arr[j + 1] = key;
+        }
+
+        long endTime = System.nanoTime();
+
+        long executionTime = endTime - startTime;
+        System.out.println("Execution Time (nanoseconds): " + executionTime);
+        System.out.println("Execution Time (milliseconds): " + executionTime / 1_000_000);
+    }
+}
