@@ -1,0 +1,76 @@
+import java.util.Arrays;
+import java.util.Scanner;
+
+class Edge implements Comparable<Edge> {
+    int src, dest, weight;
+
+    public int compareTo(Edge e) {
+        return this.weight - e.weight;
+    }
+}
+
+class KruskalMST {
+    int v, e;
+    Edge[] edges;
+
+    KruskalMST(int v, int e) {
+        this.v = v;
+        this.e = e;
+        edges = new Edge[e];
+        for (int i = 0; i < e; i++)
+            edges[i] = new Edge();
+    }
+
+    int find(int[] parent, int i) {
+        if (parent[i] != i)
+            parent[i] = find(parent, parent[i]);
+        return parent[i];
+    }
+
+    void union(int[] parent, int x, int y) {
+        int xroot = find(parent, x);
+        int yroot = find(parent, y);
+        parent[xroot] = yroot;
+    }
+
+    void kruskalMST() {
+        Edge[] result = new Edge[v - 1];
+        int[] parent = new int[v];
+
+        for (int i = 0; i < v; i++)
+            parent[i] = i;
+
+        Arrays.sort(edges);
+
+        int i = 0, j = 0;
+        while (j < v - 1 && i < e) {
+            Edge next = edges[i++];
+            int x = find(parent, next.src);
+            int y = find(parent, next.dest);
+
+            if (x != y) {
+                result[j++] = next;
+                union(parent, x, y);
+            }
+        }
+
+        for (i = 0; i < j; i++)
+            System.out.println(result[i].src + " - " + result[i].dest + " : " + result[i].weight);
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int v = sc.nextInt();
+        int e = sc.nextInt();
+
+        KruskalMST graph = new KruskalMST(v, e);
+
+        for (int i = 0; i < e; i++) {
+            graph.edges[i].src = sc.nextInt();
+            graph.edges[i].dest = sc.nextInt();
+            graph.edges[i].weight = sc.nextInt();
+        }
+
+        graph.kruskalMST();
+    }
+}
